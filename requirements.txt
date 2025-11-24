@@ -1,0 +1,97 @@
+# Gradio: 사용자 인터페이스를 빠르게 만들기 위한 라이브러리
+# 주로 머신러닝 모델의 데모를 만드는 데 사용됩니다.
+gradio==4.21.0
+
+# FastAPI: 빠르고 현대적인 웹 프레임워크
+# RESTful API를 쉽게 만들 수 있게 해줍니다.
+fastapi==0.110.0
+
+# Gunicorn: Python WSGI HTTP 서버
+# 프로덕션 환경에서 FastAPI 애플리케이션을 실행하는 데 사용됩니다.
+gunicorn
+
+# # vLLM: 대규모 언어 모델을 위한 고성능 추론 엔진
+# # LLM(Large Language Model) 추론을 가속화하는 데 사용됩니다.
+# vllm==0.2.5
+
+# Uvicorn: ASGI 서버
+# FastAPI 애플리케이션을 실행하는 데 사용되며, 비동기 처리를 지원합니다.
+uvicorn==0.28.0
+
+# Gradio: 사용자 인터페이스를 빠르게 만들기 위한 라이브러리
+# 주로 머신러닝 모델의 데모를 만드는 데 사용됩니다.
+gradio==4.21.0
+
+# Redis: 인메모리 데이터 구조 저장소
+# 캐싱, 메시지 브로커, 세션 관리 등에 사용됩니다.
+redis==5.0.1
+
+# Elasticsearch: 검색 및 분석 엔진
+# 빠른 검색과 분석을 위해 사용되며, 특히 텍스트 검색과 데이터 조회 성능을 향상시킵니다.
+elasticsearch==7.10.1
+
+# Prometheus Client: 애플리케이션 모니터링을 위한 클라이언트 라이브러리
+# 메트릭을 수집하고 Prometheus 서버에 노출시키는 데 사용됩니다.
+prometheus_client==0.20.0
+
+# LangChain: LLM 기반 애플리케이션을 쉽게 구축하기 위한 프레임워크
+# 여러 LLM과의 통합을 지원하며, 체인과 에이전트 등 다양한 기능을 제공하여
+# 고급 자연어 처리 워크플로우를 설계하는 데 유용합니다.
+# 주로 대화형 에이전트, 문서 요약 및 생성, 그리고 복잡한 워크플로우 설계에 활용됩니다.
+langchain
+
+langchain-core
+
+langchain-community
+
+# Ollama: 다양한 LLM과 상호작용할 수 있는 클라이언트 라이브러리
+# Ollama API를 통해 여러 언어 모델을 손쉽게 사용할 수 있게 해줍니다.
+# 대규모 언어 모델을 빠르게 배포하고, 추론을 최적화하는 데 유용합니다.
+ollama
+
+# Rank-BM25: 정보 검색을 위한 우수한 텍스트 일치 알고리즘
+# BM25는 토큰화된 텍스트 간의 유사도를 평가하고 랭킹을 계산하는 데 사용됩니다.
+rank_bm25
+
+# Sentence-Transformers: 문장 임베딩을 생성하는 라이브러리
+# 문장, 단락, 그리고 짧은 텍스트를 고차원 벡터로 변환하여 텍스트 간 유사도를 측정하거나
+# 다양한 자연어 처리 작업에서 유용하게 활용됩니다.
+sentence-transformers
+
+# ChromaDB: Vector Search를 지원하는 라이브러리
+chromadb == 0.4.24
+
+# KoNLPy: 한국어 자연어 처리를 위한 라이브러리
+# 다양한 한국어 형태소 분석기와 통합하여 한국어 텍스트 처리를 지원합니다.
+konlpy
+
+# python-mecab-ko: Mecab 한국어 형태소 분석기 파이썬 래퍼
+# 한국어 텍스트 분석을 위한 파이썬 기반 Mecab 라이브러리입니다.
+python-mecab-ko
+
+# ir-metrics: 정보 검색 성능 측정 라이브러리
+# 정보 검색에서 사용되는 평가 지표(MRR, Precision@k 등)를 제공하며, 검색 시스템의 성능을 분석하는 데 사용됩니다.
+ir-metrics
+
+# pydantic-settings: Pydantic 설정 관리 라이브러리
+# 애플리케이션 설정을 쉽게 관리하고 유효성 검사를 수행할 수 있습니다.
+# pydantic 버전 2.0 이상부터 별도의 패키지로 분리되었음
+pydantic-settings
+
+# ELL: Functional Prompt Engineering Framework
+# 프롬프트 엔지니어링을 위한 도구로, LLM과의 상호작용을 개선합니다.
+## gradio는 numpy~=1.0을 요구하나, ell-ai는 numpy~=2.0을 요구하므로 버전 충돌이 발생함.
+# ell-ai
+
+# 참고: 버전 번호는 예시일 뿐입니다. 실제 사용 시 최신 안정 버전을 확인하고 업데이트하는 것이 좋습니다.
+# ELL: Functional Prompt Engineering Framework
+# 프롬프트 엔지니어링을 위한 도구로, LLM과의 상호작용을 개선합니다.
+## gradio는 numpy~=1.0을 요구하나, ell-ai는 numpy~=2.0을 요구하므로 버전 충돌이 발생함.
+# ell-ai
+
+# numpy 다운그레이드
+# Numpy 2.x 버전은 langchain-community와 버전 충돌 발생
+numpy<2.0
+
+# chromadb를 대체할 faiss
+faiss-cpu

@@ -1,0 +1,9 @@
+# prometheus.yml
+global:
+  scrape_interval: 15s  # Prometheus가 15초마다 데이터를 수집하도록 설정
+
+scrape_configs:
+  - job_name: 'fastapi'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['localhost:8000']   # fastapi ip와 port 지정

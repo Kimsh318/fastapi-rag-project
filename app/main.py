@@ -4,8 +4,6 @@ import asyncio
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request
-from fastapi.staticfiles import StaticFiles
-from fastapi.openapi.docs import get_swagger_ui_html
 
 from app.core.config import settings
 from app.core.events import startup_event, shutdown_event
@@ -15,7 +13,6 @@ from app.atomic_services.queryRefine.api import router as query_refine_router
 from app.atomic_services.queryFormatting.api import router as query_formatting_router
 from app.atomic_services.queryValidation.api import router as query_validation_router
 from app.atomic_services.retrieval_parallel_v4.api import router as retrieval_parallel_router
-from app.atomic_services.generation.api import router as generation_router
 from app.atomic_services.healthcheck.api import router as healthcheck_router
 from app.atomic_services.user_feedback.api import router as user_feedback_router
 
@@ -35,18 +32,13 @@ def create_app():
     """
     FastAPI 애플리케이션을 생성하고 설정하는 함수.
     """
-    # offline 환경에서는 외부 Doc URL을 불러오는 기능을 끄기
     app = FastAPI(docs_url=None, redoc_url=None)
-    
-    # 정적 파일 마운트
-    app.mount("/static", StaticFiles(directory=settings.STATIC_PATH), name="static")
 
     # Service 라우터 추가
     app.include_router(query_refine_router, prefix="/queryRefine", tags=["QueryRefine"])
     app.include_router(query_formatting_router, prefix="/queryFormatting", tags=["QueryFormatting"])
     app.include_router(query_validation_router, prefix="/queryValidation", tags=["QueryValidation"])
     app.include_router(retrieval_parallel_router, prefix="/retrieval_parallel", tags=["RetrievalParallele"])
-    app.include_router(generation_router, prefix="/generation", tags=["Generation"])
     app.include_router(healthcheck_router, prefix="/healthCheck", tags=["HealthCheck"])
     app.include_router(user_feedback_router, prefix="/userFeedback", tags=["userFeedback"])
 
@@ -73,17 +65,6 @@ def read_root():
     logger = logging.getLogger(__name__)
     logger.debug("Root endpoint called.")
     return {"Hello": "World"}
-
-
-@app.get("/docs")
-async def custom_swagger_ui_html():
-    """API 문서 엔드포인트"""
-    return get_swagger_ui_html(
-        openapi_url=app.openapi_url,
-        title=app.title + " - Swagger UI",
-        swagger_js_url="/static/swagger-ui/swagger-ui-bundle.js",
-        swagger_css_url="/static/swagger-ui/swagger-ui.css"
-    )
 
 
 # Gunicorn 로거 설정

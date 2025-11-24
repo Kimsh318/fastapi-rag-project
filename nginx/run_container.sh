@@ -1,1 +1,0 @@
-docker run -d -it --network app-network -p 80:80 --name nginx_container  nginx_image

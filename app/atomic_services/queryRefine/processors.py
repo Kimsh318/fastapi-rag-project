@@ -1,9 +1,6 @@
-# Python 기본 라이브러리
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Dict
 
-# 애플리케이션 내부 모듈
 from app.utils.logging_utils import log_execution_time_async
 from app.core.config import settings
 
@@ -24,7 +21,7 @@ def get_query_refine_processor(es_client, faiss_client, app_env):
 
 
 class BaseQueryRefineProcessor:
-    """Base QueryRefine Processor"""
+    """Base QueryRefine Processor - 공통 헬퍼 메서드만 포함"""
     
     # 클래스 변수로 패턴 정의
     BAD_PATTERN_HANGUL = '[ㄱ-ㅎㅏ-ㅣ]'
@@ -48,24 +45,12 @@ class BaseQueryRefineProcessor:
             refined_query = re.sub(self.BAD_PATTERN_SYMBOLS, '', refined_query).strip()
         return {'refined_query': refined_query}
 
-    async def refine_for_keyword_search(self, query: str) -> dict:
-        """키워드 검색용 쿼리 정제"""
-        raise NotImplementedError("이 메서드는 하위 클래스에서 구현되어야 합니다.")
-
-    async def refine_for_vector_search(self, query: str) -> dict:
-        """벡터 검색용 쿼리 정제"""
-        raise NotImplementedError("이 메서드는 하위 클래스에서 구현되어야 합니다.")
-
 
 class PrototypeQueryRefineProcessor(BaseQueryRefineProcessor):
     """Prototype 환경의 QueryRefine Processor"""
              
     async def refine_for_keyword_search(self, query: str) -> dict:
-        """
-        Elasticsearch analyzer 기반 키워드 검색용 쿼리 정제
-        1. 기본 전처리
-        2. Elasticsearch analyzer를 통한 토큰화
-        """
+        """Elasticsearch analyzer 기반 키워드 검색용 쿼리 정제"""
         res = await self.es.indices.analyze(
             index=self.es_index,
             body={
@@ -78,12 +63,7 @@ class PrototypeQueryRefineProcessor(BaseQueryRefineProcessor):
         return {'refined_query': refined_query}
 
     async def refine_for_vector_search(self, query: str) -> dict:
-        """
-        Vector 검색용 쿼리 정제
-        1. 기본 전처리
-        2. N-gram 기반 유사 문구 식별
-        3. 식별된 문구 교체
-        """
+        """Vector 검색용 쿼리 정제"""
         revised_query_tokens = await self.faiss_client.filter_query(query)
         revised_query = ' '.join(revised_query_tokens).replace('[REMOVED', '')
         refined_query = await self.faiss_client.grammar_error_correction(revised_query)
@@ -91,15 +71,11 @@ class PrototypeQueryRefineProcessor(BaseQueryRefineProcessor):
 
 
 class DevelopmentQueryRefineProcessor(BaseQueryRefineProcessor):
-    """Development 환경의 QueryRefine Processor"""
+    """Development 환경의 QueryRefine Processor - 독립적으로 수정 가능"""
     
     @log_execution_time_async
     async def refine_for_keyword_search(self, query: str) -> dict:
-        """
-        Elasticsearch analyzer 기반 키워드 검색용 쿼리 정제
-        1. 기본 전처리
-        2. Elasticsearch analyzer를 통한 토큰화
-        """
+        """Elasticsearch analyzer 기반 키워드 검색용 쿼리 정제"""
         res = await self.es.indices.analyze(
             index=self.es_index,
             body={
@@ -112,24 +88,16 @@ class DevelopmentQueryRefineProcessor(BaseQueryRefineProcessor):
         
     @log_execution_time_async
     async def refine_for_vector_search(self, query: str) -> dict:
-        """
-        Vector 검색용 쿼리 정제
-        Development 환경에서는 간단한 정제만 수행
-        """
-        # 간단한 쿼리 반환 (복잡한 synonym 처리는 제거)
+        """Vector 검색용 쿼리 정제 - Development 환경에서는 간단한 정제만 수행"""
         return {'refined_query': [query]}
 
 
 class ProductionQueryRefineProcessor(BaseQueryRefineProcessor):
-    """Production 환경의 QueryRefine Processor"""
+    """Production 환경의 QueryRefine Processor - 독립적으로 수정 가능"""
     
     @log_execution_time_async
     async def refine_for_keyword_search(self, query: str) -> dict:
-        """
-        Elasticsearch analyzer 기반 키워드 검색용 쿼리 정제
-        1. 기본 전처리
-        2. Elasticsearch analyzer를 통한 토큰화
-        """
+        """Elasticsearch analyzer 기반 키워드 검색용 쿼리 정제"""
         res = await self.es.indices.analyze(
             index=self.es_index,
             body={
@@ -142,8 +110,5 @@ class ProductionQueryRefineProcessor(BaseQueryRefineProcessor):
         
     @log_execution_time_async
     async def refine_for_vector_search(self, query: str) -> dict:
-        """
-        Vector 검색용 쿼리 정제
-        Production 환경에서는 간단한 정제만 수행
-        """
+        """Vector 검색용 쿼리 정제 - Production 환경에서는 간단한 정제만 수행"""
         return {'refined_query': [query]}

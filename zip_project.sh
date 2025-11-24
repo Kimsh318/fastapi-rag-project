@@ -1,1 +1,0 @@
-tar --exclude='./app/static' --exclude='./app/execution_time_log/log_backup' --exclude='./app/execution_time_log/' --exclude='./app/db_faiss' --exclude='./gunicorn_log'  -czvf v24_refactoring.tar.gz ./
